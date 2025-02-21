@@ -10,10 +10,22 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Get the base directory (make sure it is 2 levels up if settings.py is inside an inner folder)
+BASE_DIR = Path(__file__).resolve().parent
+
+# Load environment variables
+env_path = os.path.join(BASE_DIR, ".env")  # Ensure correct path
+load_dotenv(env_path)  # Load .env file
+
+# Read TMDB API Key
+TMDB_API_KEY = os.getenv("TMDB_API_KEY")
+
+# Debugging: Print API key (remove after testing)
+print(f"🔍 TMDB API Key Loaded: {TMDB_API_KEY}")
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,6 +39,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'movies.CustomUser'
 
 # Application definition
 
@@ -37,6 +50,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    #third party
+    'rest_framework',
+
+    #local
+    'movies',
 ]
 
 MIDDLEWARE = [
@@ -49,7 +68,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'CineBot.urls'
+ROOT_URLCONF = 'Backend.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'CineBot.wsgi.application'
+WSGI_APPLICATION = 'Backend.wsgi.application'
 
 
 # Database
