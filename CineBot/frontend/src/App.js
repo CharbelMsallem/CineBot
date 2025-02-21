@@ -1,29 +1,24 @@
-import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import MovieDetails from './pages/MovieDetails';
+import Profile from './pages/Profile';
+import './styles/App.css';
 
 function App() {
-  const [movies, setMovies] = useState([]);
-
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/movies/") // 🔥 Replace with your API URL
-      .then((response) => response.json())
-      .then((data) => setMovies(data))
-      .catch((error) => console.error("Error fetching movies:", error));
-  }, []);
-
   return (
-    <div>
-      <h1>🎬 Movie List</h1>
-      <ul>
-        {movies.map((movie) => (
-          <li key={movie.id}>
-            <h2>{movie.title}</h2>
-            <p>{movie.description}</p>
-            <p>⭐ {movie.rating}</p>
-            <img src={movie.poster} alt={movie.title} width="200" />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/movie/:id" element={<MovieDetails />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </Router>
   );
 }
 

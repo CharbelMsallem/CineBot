@@ -25,7 +25,11 @@ load_dotenv(env_path)  # Load .env file
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
 # Debugging: Print API key (remove after testing)
-print(f"🔍 TMDB API Key Loaded: {TMDB_API_KEY}")
+import os
+
+if os.environ.get('RUN_MAIN') == 'true':
+    print(f"🔍 TMDB API Key Loaded: {TMDB_API_KEY}")
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -53,12 +57,21 @@ INSTALLED_APPS = [
 
     #third party
     'rest_framework',
+    'rest_framework.authtoken',
 
     #local
     'movies',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -68,7 +81,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Backend.urls'
+# ✅ Allow specific origin (recommended for development)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # If you switch back to port 3000
+    "http://localhost:3001",  # Your current frontend port
+    "http://127.0.0.1:3001",  # In case React uses 127.0.0.1
+]
+
+ROOT_URLCONF = 'urls'
 
 TEMPLATES = [
     {
@@ -86,7 +106,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Backend.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database

@@ -26,7 +26,10 @@ class Movie(models.Model):
 # Custom User Model
 class CustomUser(AbstractUser):
     favorite_genres = models.ManyToManyField(Genre, blank=True, related_name='favorite_users')
-    watch_history = models.ManyToManyField(Movie, blank=True, related_name='watched_by')
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    preferences = models.JSONField(default=dict, blank=True)  # Example: {"genres": ["Action", "Drama"]}
+    watch_history = models.JSONField(default=list, blank=True)  # Example: [movie_id_1, movie_id_2]
 
     def __str__(self):
         return self.username

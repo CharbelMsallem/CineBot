@@ -1,0 +1,17 @@
+@import './Login.css';
+
+.movie-details {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+
+.movie-details img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.movie-details h2 {
+  color: #8A2BE2;
+}
