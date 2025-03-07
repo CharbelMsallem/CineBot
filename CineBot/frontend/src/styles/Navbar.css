@@ -1,17 +1,308 @@
+/* Navbar.css */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 .navbar {
-    background-color: #1a1a1a;
-    color: #fff;
+  background-color: var(--background);
+  color: var(--text);
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  background-color: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.5px;
+  position: relative;
+}
+
+.logo-text::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease;
+}
+
+.logo-text:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Desktop Navigation Links */
+.navbar-links-desktop {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-light);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.register-btn {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.register-btn:hover {
+  background-color: var(--primary-light);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+}
+
+.register-btn::after {
+  display: none;
+}
+
+.logout-btn {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 50px;
+  color: var(--text);
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: rgba(138, 43, 226, 0.1);
+  color: var(--primary-light);
+}
+
+/* Burger Menu */
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  z-index: 120;
+}
+
+.burger-bar {
+  height: 3px;
+  width: 100%;
+  background-color: var(--text);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Transformed burger bars when sidebar is open */
+.burger-bar.open:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+  background-color: var(--primary);
+}
+
+.burger-bar.open:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-bar.open:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+  background-color: var(--primary);
+}
+
+/* Mobile Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 280px;
+  height: 100vh;
+  background-color: var(--surface);
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  z-index: 110;
+  transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.open {
+  right: 0;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 105;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(3px);
+}
+
+.sidebar-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--surface-light);
+}
+
+.sidebar-logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-sidebar:hover {
+  color: var(--primary);
+  transform: rotate(90deg);
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.2rem;
+}
+
+.sidebar-link {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.7rem 0;
+  position: relative;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid var(--surface-light);
+}
+
+.sidebar-link:hover {
+  color: var(--primary-light);
+  padding-left: 0.5rem;
+}
+
+.register-link {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.sidebar-logout-btn {
+  margin-top: 1rem;
+  background-color: var(--surface-light);
+  border: none;
+  border-radius: 8px;
+  color: var(--text);
+  padding: 0.8rem 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.sidebar-logout-btn:hover {
+  background-color: rgba(138, 43, 226, 0.2);
+  color: var(--primary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .navbar-links-desktop {
+    display: none;
+  }
+  
+  .burger-menu {
     display: flex;
-    justify-content: space-between;
-    padding: 1rem;
   }
   
-  .navbar a {
-    color: #8A2BE2;
-    margin: 0 10px;
-    text-decoration: none;
+  .navbar-container {
+    padding: 1rem 1.5rem;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar {
+    display: none;
   }
   
-  .navbar a:hover {
-    text-decoration: underline;
+  .sidebar-overlay {
+    display: none;
   }
+}

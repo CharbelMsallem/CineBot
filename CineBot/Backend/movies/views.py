@@ -17,7 +17,6 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 import requests
-import random
 
 
 
@@ -94,17 +93,17 @@ TMDB_BASE_URL = "https://api.themoviedb.org/3"
 def fetch_movie_details(request, movie_id):
     """Fetch movie details from TMDb API instead of local database."""
     api_key = settings.TMDB_API_KEY  # Load API key
-
     if not api_key:
         return Response({'error': 'TMDb API key is missing'}, status=500)
-
+    
     # Call TMDb API to get movie details
     url = f"{TMDB_BASE_URL}/movie/{movie_id}?api_key={api_key}&language=en-US"
     response = requests.get(url)
-
+    
     if response.status_code == 200:
         data = response.json()
         movie_data = {
+            "id": data.get("id"),
             "title": data.get("title"),
             "genres": [genre["name"] for genre in data.get("genres", [])],
             "plot": data.get("overview"),
@@ -116,41 +115,75 @@ def fetch_movie_details(request, movie_id):
     else:
         return Response({"error": "Movie not found"}, status=response.status_code)
 
-def fetch_random_movies(request):
-    """Fetch 30 random movies from TMDb API."""
+@api_view(['GET'])
+def fetch_popular_movies(request):
+    """Fetch most popular movies from TMDb API."""
     api_key = settings.TMDB_API_KEY
-    TMDB_BASE_URL = "https://api.themoviedb.org/3"
-
     if not api_key:
         return Response({'error': 'TMDb API key is missing'}, status=500)
+    
+    url = f"{TMDB_BASE_URL}/movie/popular?api_key={api_key}&language=en-US&page=1"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        movies = []
+        for index, movie in enumerate(data.get("results", [])[:10]):
+            movies.append({
+                "id": movie.get("id"),
+                "title": movie.get("title"),
+                "poster_url": f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}" if movie.get("poster_path") else None,
+                "rating": movie.get("vote_average"),
+                "rank": index + 1  # Add ranking for popular movies
+            })
+        return Response(movies)
+    else:
+        return Response({"error": "Could not fetch popular movies"}, status=response.status_code)
 
-    all_movies = []
+@api_view(['GET'])
+def fetch_top_rated_movies(request):
+    """Fetch highest rated movies from TMDb API."""
+    api_key = settings.TMDB_API_KEY
+    if not api_key:
+        return Response({'error': 'TMDb API key is missing'}, status=500)
+    
+    url = f"{TMDB_BASE_URL}/movie/top_rated?api_key={api_key}&language=en-US&page=1"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        movies = []
+        for movie in data.get("results", [])[:10]:
+            movies.append({
+                "id": movie.get("id"),
+                "title": movie.get("title"),
+                "poster_url": f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}" if movie.get("poster_path") else None,
+                "rating": movie.get("vote_average")
+            })
+        return Response(movies)
+    else:
+        return Response({"error": "Could not fetch top rated movies"}, status=response.status_code)
 
-    # Fetch movies from multiple pages to increase randomness
-    for page in range(1, 11):  # Fetch from pages 1 to 10
-        url = f"{TMDB_BASE_URL}/movie/popular?api_key={api_key}&language=en-US&page={page}"
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            data = response.json().get('results', [])
-            all_movies.extend(data)
-        else:
-            return Response({"error": "Failed to fetch movies"}, status=response.status_code)
-
-    # Select 30 random movies
-    random_movies = random.sample(all_movies, min(30, len(all_movies)))
-
-    # Format movie data
-    formatted_movies = [
-        {
-            "id": movie.get("id"),
-            "title": movie.get("title"),
-            "plot": movie.get("overview"),
-            "rating": movie.get("vote_average"),
-            "release_date": movie.get("release_date"),
-            "poster_url": f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}" if movie.get("poster_path") else None
-        }
-        for movie in random_movies
-    ]
-
-    return JsonResponse(formatted_movies, safe=False)
+@api_view(['GET'])
+def fetch_genre_movies(request, genre_id):
+    """Fetch movies by genre from TMDb API."""
+    api_key = settings.TMDB_API_KEY
+    if not api_key:
+        return Response({'error': 'TMDb API key is missing'}, status=500)
+    
+    url = f"{TMDB_BASE_URL}/discover/movie?api_key={api_key}&language=en-US&sort_by=popularity.desc&with_genres={genre_id}&page=1"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        movies = []
+        for movie in data.get("results", [])[:10]:
+            movies.append({
+                "id": movie.get("id"),
+                "title": movie.get("title"),
+                "poster_url": f"https://image.tmdb.org/t/p/w500{movie.get('poster_path')}" if movie.get("poster_path") else None,
+                "rating": movie.get("vote_average")
+            })
+        return Response(movies)
+    else:
+        return Response({"error": f"Could not fetch movies for genre {genre_id}"}, status=response.status_code)
