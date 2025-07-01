@@ -5,3 +5,35 @@ body {
   background-color: #1a1a1a;
   color: #fff;
 }
+
+:root {
+  /* Core colors */
+  --primary: #8A2BE2;
+  --primary-dark: #6A1CB3;
+  --primary-light: #A459FF;
+  --accent: #FF2EE6;
+  --accent-secondary: #00EAFF;
+  
+  /* Background system */
+  --background: #0A0A0A;
+  --background-alt: #0F0F13;
+  --surface: #1A1A1A;
+  --surface-light: #2D2D2D;
+  --surface-elevated: #252530;
+  
+  /* Text system */
+  --text: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+  
+  /* Effects */
+  --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  --neon-glow: 0 0 10px rgba(138, 43, 226, 0.6), 0 0 20px rgba(138, 43, 226, 0.4);
+  --glass-blur: blur(10px);
+  --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--accent));
+  --gradient-surface: linear-gradient(180deg, rgba(42, 42, 50, 0.8), rgba(26, 26, 30, 0.8));
+  --gradient-subtle: linear-gradient(120deg, rgba(138, 43, 226, 0.05), rgba(255, 46, 230, 0.05));
+}

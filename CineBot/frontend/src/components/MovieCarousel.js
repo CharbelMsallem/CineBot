@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import '../styles/MovieCarousel.css';
 
-const MovieCarousel = ({ title, movies, showRank = false, genreId = null }) => {
+const MovieCarousel = ({ title, movies, showRank = false, genreId = null, nbOfMovies }) => {
   const navigate = useNavigate();
   
   const handleViewMore = () => {
@@ -38,10 +38,9 @@ const MovieCarousel = ({ title, movies, showRank = false, genreId = null }) => {
                   <img src={movie.poster_url || '/placeholder-poster.jpg'} alt={movie.title} className="movie-poster" />
                   <div className="movie-overlay">
                     <div className="rating-badge">★ {movie.rating.toFixed(1)}</div>
-                    <button className="details-btn">View Details</button>
                   </div>
                 </div>
-                <h3 className="movie-title">{movie.title}</h3>
+                <div className="movie-title">{movie.title}</div>
               </div>
             </Link>
           ))}

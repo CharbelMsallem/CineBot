@@ -1,0 +1,196 @@
+.search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  
+  .search-form {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    position: relative;
+  }
+  
+  .search-form::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 60px;
+    background: var(--gradient-primary);
+    opacity: 0.5;
+    filter: blur(15px);
+    z-index: -1;
+    transition: var(--transition-standard);
+  }
+  
+  .search-container {
+    position: relative;
+    width: 100%;
+    border-radius: 50px;
+    background: var(--gradient-surface);
+    backdrop-filter: var(--glass-blur);
+    transition: var(--transition-standard);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 5px;
+  }
+  
+  .search-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.2);
+  }
+  
+  .search-container:focus-within {
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 1.3rem 1.8rem;
+    padding-right: 5rem;
+    border: none;
+    border-radius: 50px;
+    background-color: transparent;
+    color: var(--text);
+    font-size: 1.1rem;
+    transition: var(--transition-standard);
+  }
+  
+  .search-input:focus {
+    outline: none;
+  }
+  
+  .search-input::placeholder {
+    color: var(--text-tertiary);
+    font-weight: 300;
+  }
+  
+  .search-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gradient-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-standard);
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+  }
+  
+  .search-button:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+  }
+  
+  .search-button svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5px;
+  }
+  
+  /* Search Results Styling */
+  .search-results {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 0;
+    right: 0;
+    background: rgba(25, 25, 35, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 200;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px;
+  }
+  .search-results::-webkit-scrollbar {
+    display: none;
+  }
+  .search-results {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+  
+  .search-result-item {
+    display: flex;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-bottom: 8px;
+  }
+  
+  .search-result-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .search-result-item:hover {
+    background-color: rgba(138, 43, 226, 0.15);
+  }
+  
+  .search-result-poster {
+    width: 60px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 15px;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  .search-result-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .no-poster {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+  }
+  
+  .search-result-info {
+    flex: 1;
+  }
+  
+  .search-result-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    color: var(--text);
+  }
+  
+  .search-result-meta {
+    display: flex;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+  
+  .search-result-meta .rating {
+    margin-right: 15px;
+  }
+  
+  .no-results,
+  .search-loading {
+    padding: 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }

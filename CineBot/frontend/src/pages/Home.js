@@ -1,74 +1,71 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
 import MovieCarousel from '../components/MovieCarousel';
+import SearchBar from '../components/SearchBar';
+import '../styles/Navbar.css';
 import '../styles/Home.css';
 
-// Genre IDs for TMDb API
 const GENRE_IDS = {
   ACTION: 28,
   COMEDY: 35,
   ROMANCE: 10749,
   HORROR: 27,
-  SCIFI: 878
+  SCIFI: 878,
 };
 
 const Home = () => {
-  const [search, setSearch] = useState('');
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [topRatedMovies, setTopRatedMovies] = useState([]);
-  const [comedyMovies, setComedyMovies] = useState([]);
-  const [romanceMovies, setRomanceMovies] = useState([]);
+  const [movies, setMovies] = useState({
+    popular: [],
+    topRated: [],
+    comedy: [],
+    romance: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setLoading(true);
-      try {
-        // Fetch all required data in parallel
-        const [popularRes, topRatedRes, comedyRes, romanceRes] = await Promise.all([
-          fetch('http://127.0.0.1:8000/api/movies/popular/'),
-          fetch('http://127.0.0.1:8000/api/movies/top-rated/'),
-          fetch(`http://127.0.0.1:8000/api/movies/genre/${GENRE_IDS.COMEDY}/`),
-          fetch(`http://127.0.0.1:8000/api/movies/genre/${GENRE_IDS.ROMANCE}/`)
-        ]);
-        
-        // Check for any failed requests
-        if (!popularRes.ok || !topRatedRes.ok || !comedyRes.ok || !romanceRes.ok) {
-          throw new Error('One or more API requests failed');
-        }
-        
-        // Parse all responses
-        const popularData = await popularRes.json();
-        const topRatedData = await topRatedRes.json();
-        const comedyData = await comedyRes.json();
-        const romanceData = await romanceRes.json();
-        
-        // Update state with fetched data
-        setPopularMovies(popularData);
-        setTopRatedMovies(topRatedData);
-        setComedyMovies(comedyData);
-        setRomanceMovies(romanceData);
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        setError('Failed to load movies. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchAllData();
+  const fetchAllData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const endpoints = [
+        { key: 'popular', url: 'http://127.0.0.1:8000/api/tmdb/movies/popular/' },
+        { key: 'topRated', url: 'http://127.0.0.1:8000/api/tmdb/movies/top-rated/' },
+        { key: 'comedy', url: `http://127.0.0.1:8000/api/tmdb/genres/${GENRE_IDS.COMEDY}/movies/` },
+        { key: 'romance', url: `http://127.0.0.1:8000/api/tmdb/genres/${GENRE_IDS.ROMANCE}/movies/` },
+      ];
+      
+      const responses = await Promise.all(
+        endpoints.map(({ url }) => fetch(url).then(res => res.ok ? res.json() : Promise.reject(res.statusText)))
+      );
+      
+      setMovies({
+        popular: responses[0],
+        topRated: responses[1],
+        comedy: responses[2],
+        romance: responses[3],
+      });
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError('Failed to load movies. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
-  };
-  
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (search.trim()) {
-      navigate(`/search?query=${encodeURIComponent(search)}`);
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  const handleSearch = async (query) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/tmdb/movies/search/?q=${encodeURIComponent(query)}`);
+      if (!response.ok) {
+        throw new Error('Search failed');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('Search error:', error);
     }
   };
 
@@ -80,7 +77,6 @@ const Home = () => {
           <div className="dot"></div>
           <div className="dot"></div>
         </div>
-        <p>Loading amazing movies for you...</p>
       </div>
     );
   }
@@ -91,7 +87,7 @@ const Home = () => {
         <div className="error-icon">!</div>
         <h2>Oops! Something went wrong</h2>
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Try Again</button>
+        <button onClick={fetchAllData}>Try Again</button>
       </div>
     );
   }
@@ -102,49 +98,14 @@ const Home = () => {
         <div className="hero-content">
           <h1>Discover Your Next Favorite Movie</h1>
           <p>Explore thousands of movies across all genres</p>
-          <form onSubmit={handleSearchSubmit} className="search-form">
-            <div className="search-container">
-              <input
-                type="text"
-                placeholder="Search for movies..."
-                value={search}
-                onChange={handleSearch}
-                className="search-input"
-              />
-              <button type="submit" className="search-button">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </button>
-            </div>
-          </form>
+          <SearchBar onSearch={handleSearch} />
         </div>
       </div>
-
       <div className="categories-container">
-        <MovieCarousel 
-          title="Popular Right Now" 
-          movies={popularMovies} 
-          showRank={true} 
-        />
-        
-        <MovieCarousel 
-          title="Top Rated" 
-          movies={topRatedMovies} 
-        />
-        
-        <MovieCarousel 
-          title="Comedy Movies" 
-          movies={comedyMovies} 
-          genreId={GENRE_IDS.COMEDY} 
-        />
-        
-        <MovieCarousel 
-          title="Romance Movies" 
-          movies={romanceMovies} 
-          genreId={GENRE_IDS.ROMANCE} 
-        />
+        <MovieCarousel title="Popular Right Now" movies={movies.popular} showRank={true} />
+        <MovieCarousel title="Top Rated" movies={movies.topRated} />
+        <MovieCarousel title="Comedy Movies" movies={movies.comedy} genreId={GENRE_IDS.COMEDY} />
+        <MovieCarousel title="Romance Movies" movies={movies.romance} genreId={GENRE_IDS.ROMANCE} />
       </div>
     </div>
   );

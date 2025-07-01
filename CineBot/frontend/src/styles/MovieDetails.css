@@ -1,0 +1,645 @@
+/* MovieDetails.css */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  
+  .movie-details-details-container {
+    position: relative;
+    color: var(--text);
+    min-height: 100vh;
+    background-color: var(--background);
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: var(--primary-light);
+  }
+  
+  /* Backdrop styling */
+  .backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70vh;
+    background-size: cover;
+    background-position: center top;
+    z-index: 0;
+  }
+  
+  .backdrop::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(0deg, var(--background) 10%, rgba(10, 10, 10, 0.7) 50%, rgba(138, 43, 226, 0.3) 100%);
+  }
+  
+  .content-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  /* Movie header section */
+  .movie-details-header {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .movie-details-header {
+      flex-direction: row;
+    }
+  }
+  
+  .poster-container {
+    position: relative;
+    flex-shrink: 0;
+    aspect-ratio: 2/3;
+  }
+  
+  .movie-details-poster {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    border: 2px solid var(--primary-light);
+  }
+  
+  .details-rating-badge {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: var(--neon-glow);
+    border: 2px solid var(--accent);
+  }
+  
+  .movie-details-info {
+    flex-grow: 1;
+  }
+  
+  .movie-details-title {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, var(--text), var(--primary-light));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+  }
+  
+  .movie-details-tagline {
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .movie-details-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .movie-details-meta span {
+    position: relative;
+    padding-right: 1.5rem;
+    color: var(--text-tertiary);
+  }
+  
+  .movie-details-meta span:not(:last-child)::after {
+    content: '•';
+    position: absolute;
+    right: 0;
+    color: var(--primary-light);
+  }
+  
+  .movie-details-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+  }
+  
+  .btn-primary {
+    background: var(--primary);
+    color: var(--text);
+    box-shadow: var(--neon-glow);
+  }
+  
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .btn-secondary {
+    background: var(--surface-light);
+    color: var(--text);
+    border: 1px solid var(--primary-light);
+  }
+  
+  .btn-secondary:hover {
+    background: var(--surface);
+    box-shadow: var(--neon-glow);
+  }
+  
+  /* Movie body sections */
+  .movie-details-body {
+    margin-top: 3rem;
+  }
+  
+  .movie-details-body section {
+    margin-bottom: 3rem;
+  }
+  
+  .movie-details-body h2 {
+    font-size: 1.8rem;
+    color: var(--primary-light);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--primary-dark);
+  }
+  
+  .movie-details-overview p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  
+  /* Movie stats section */
+  .movie-details-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    border: 1px solid var(--surface-light);
+  }
+  
+  .stat-item h3 {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .stat-item p {
+    font-size: 1.2rem;
+    color: var(--text);
+  }
+  
+  /* Cast section */
+  .cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .cast-card {
+    background: var(--surface);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--surface-light);
+  }
+  
+  .cast-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--neon-glow);
+    border-color: var(--primary-light);
+  }
+  
+  .actor-image {
+    height: 225px;
+    overflow: hidden;
+  }
+  
+  .actor-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .cast-card:hover .actor-image img {
+    transform: scale(1.05);
+  }
+  
+  .actor-name {
+    font-size: 1rem;
+    padding: 0.7rem;
+    margin: 0;
+    color: var(--text);
+  }
+  
+  .character-name {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    padding: 0 0.7rem 0.7rem;
+    margin: 0;
+  }
+
+  .btn-secondary.unlike {
+    background-color: #f44336;
+    border-color: #d32f2f;
+  }
+
+  .btn-secondary.unlike:hover {
+    background-color: #d32f2f;
+  }
+
+  .btn-secondary {
+    transition: all 0.3s ease;
+  }
+
+  /* Animation for like/unlike transition */
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .btn-secondary:active {
+    animation: pulse 0.3s ease;
+  }
+
+  /* Reviews Section Styling */
+.reviews-section {
+  margin-top: 3rem;
+  padding: 2rem;
+  background-color: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+}
+
+.reviews-section h2 {
+  color: var(--text);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.reviews-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+/* Add Review Container */
+.add-review-container {
+  background-color: var(--surface-light);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+.add-review-container h3 {
+  color: var(--text);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Rating Selector */
+.rating-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.rating-selector label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Add these new styles to fix star ratings display */
+
+/* Star display improvements */
+.star-display {
+  display: flex;
+  align-items: center;
+}
+
+.star-icon {
+  margin-right: 2px;
+}
+
+/* Make sure Font Awesome icons are visible */
+.fa {
+  display: inline-block !important;
+  font-family: 'FontAwesome' !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  line-height: 1 !important;
+}
+
+/* Star rating specific styles */
+.star-rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star {
+  cursor: pointer;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure FontAwesome icons load properly */
+.star .fa-star, 
+.star .fa-star-o,
+.review-rating .fa-star,
+.review-rating .fa-star-o {
+  font-family: 'FontAwesome' !important;
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+/* Ensure review ratings have proper styling */
+.review-rating {
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+
+
+/* Comment Input */
+.comment-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.comment-input label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.comment-input textarea {
+  min-height: 120px;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-elevated);
+  background-color: var(--background-alt);
+  color: var(--text);
+  resize: vertical;
+  font-family: inherit;
+  transition: var(--transition-standard);
+}
+
+.comment-input textarea:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.25);
+}
+
+.comment-input textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* Submit Button */
+.review-form .btn-primary {
+  align-self: flex-start;
+  padding: 0.7rem 1.5rem;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 6px;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-standard);
+  box-shadow: var(--neon-glow);
+}
+
+.review-form .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(138, 43, 226, 0.7), 0 0 30px rgba(138, 43, 226, 0.4);
+}
+
+.review-form .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Login to Review */
+.login-to-review {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--surface-light);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(138, 43, 226, 0.2);
+}
+
+.login-to-review p {
+  color: var(--text-secondary);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--primary-light);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  font-size: inherit;
+  transition: var(--transition-standard);
+}
+
+.link-button:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(255, 46, 230, 0.4);
+}
+
+/* Reviews Container */
+.reviews-container {
+  margin-top: 2rem;
+}
+
+.reviews-container h3 {
+  color: var(--text);
+  font-size: 1.3rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reviews-loading {
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.no-reviews {
+  padding: 2rem;
+  text-align: center;
+  background: var(--gradient-subtle);
+  border-radius: 8px;
+  color: var(--text-secondary);
+}
+
+/* Reviews List */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.review-card {
+  background-color: var(--surface-light);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: var(--transition-standard);
+  border-left: 3px solid transparent;
+}
+
+.review-card:hover {
+  background-color: var(--surface-elevated);
+  border-left-color: var(--primary);
+  transform: translateX(3px);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.reviewer-name {
+  color: var(--text);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.review-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.review-rating i.fa-star {
+  color: #f5c518;
+  font-size: 0.9rem;
+}
+
+.review-rating i.fa-star-o {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.review-date {
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+}
+
+.review-content {
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .review-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .review-date {
+    margin-top: 0.3rem;
+  }
+  
+  .reviews-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .movie-details-title {
+    font-size: 2rem;
+  }
+  
+  .poster-container {
+    margin: 0 auto;
+  }
+  
+  .cast-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}

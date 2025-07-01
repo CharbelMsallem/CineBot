@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+import random
+import string
 
-# Create your models here.
 
 # Genre Model
 class Genre(models.Model):
@@ -12,27 +13,32 @@ class Genre(models.Model):
 
 # Movie Model
 class Movie(models.Model):
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=255, unique=True)
-    description = models.TextField()
-    release_year = models.IntegerField()
-    genres = models.ManyToManyField(Genre, related_name='movies')
-    rating = models.FloatField(default=0.0)
-    poster = models.ImageField(upload_to='posters/', null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
 # Custom User Model
 class CustomUser(AbstractUser):
-    favorite_genres = models.ManyToManyField(Genre, blank=True, related_name='favorite_users')
+    favorite_genres = models.ManyToManyField(Genre, blank=False, related_name='favorite_users')
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-    preferences = models.JSONField(default=dict, blank=True)  # Example: {"genres": ["Action", "Drama"]}
-    watch_history = models.JSONField(default=list, blank=True)  # Example: [movie_id_1, movie_id_2]
-
+    liked_movies = models.ManyToManyField(Movie, blank=True, related_name='liked_users')
+    reviewed_movies = models.ManyToManyField(Movie, blank=True, related_name='reviewed_users')
+    
+    # Email verification fields
+    otp = models.CharField(max_length=6, blank=True, null=True)
+    otp_created_at = models.DateTimeField(blank=True, null=True)
+    is_email_verified = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.username
+    
+    def generate_otp(self):
+        """Generate a random 6-digit OTP code"""
+        otp = ''.join(random.choices(string.digits, k=6))
+        return otp
 
 # Review Model
 class Review(models.Model):
@@ -47,5 +53,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.movie.title} ({self.rating}/5)"
-        
-

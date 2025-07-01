@@ -24,12 +24,17 @@ load_dotenv(env_path)  # Load .env file
 # Read TMDB API Key
 TMDB_API_KEY = os.getenv("TMDB_API_KEY")
 
+# Cohere API settings
+COHERE_API_KEY = os.environ.get('COHERE_API_KEY', '')
+
 # Debugging: Print API key (remove after testing)
 import os
 
 if os.environ.get('RUN_MAIN') == 'true':
     print(f"🔍 TMDB API Key Loaded: {TMDB_API_KEY}")
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,8 +50,18 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'movies.CustomUser'
 
-# Application definition
 
+#email for otp
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = 'd99f5b4a8d096e'      
+EMAIL_HOST_PASSWORD = '3d22e6294cedf8' 
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+
+
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -83,9 +98,9 @@ MIDDLEWARE = [
 
 # ✅ Allow specific origin (recommended for development)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # If you switch back to port 3000
-    "http://localhost:3001",  # Your current frontend port
-    "http://127.0.0.1:3001",  # In case React uses 127.0.0.1
+    "http://localhost:3000",  
+    "http://localhost:3001",  
+    "http://127.0.0.1:3001",  
 ]
 
 ROOT_URLCONF = 'urls'
